@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace OtobankTest\TwigcsExtra\Rule;
 
@@ -47,7 +47,7 @@ class CaseSensitiveIncludeTest extends TestCase
      */
     public function testCheckWithoutFunctions(TokenStream $tokenStream, int $expectedCount) : void
     {
-        $rule = new CaseSensitiveInclude(Violation::SEVERITY_WARNING, [dirname(__DIR__, 1) . '/Resources/']);
+        $rule = new CaseSensitiveInclude(Violation::SEVERITY_WARNING, [dirname(__DIR__, 1) . '/Resources']);
         $violations = $rule->check($tokenStream);
 
         $this->assertCount($expectedCount, $violations);
