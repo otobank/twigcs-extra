@@ -37,7 +37,7 @@ final class CaseSensitiveInclude extends AbstractRule implements RuleInterface
         do {
             $token = $tokens->getCurrent();
             if (!(Token::NAME_TYPE === $token->getType() &&
-                'include' === $token->getValue())) {
+                in_array($token->getValue(), ['include', 'extends', 'import'], true))) {
                 continue;
             }
 
@@ -48,7 +48,7 @@ final class CaseSensitiveInclude extends AbstractRule implements RuleInterface
                     $tokens->getSourceContext()->getPath(),
                     $token->getLine(),
                     $token->getColumn(),
-                    sprintf('include "%s" is not valid path.', $include)
+                    sprintf('%s "%s" is not valid path.', $token->getValue(), $include)
                 );
             }
 

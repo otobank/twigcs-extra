@@ -19,22 +19,62 @@ class CaseSensitiveIncludeTest extends TestCase
         $lexer = new Lexer();
 
         return [
-            'success' => [
+            'success:include' => [
                 $lexer->tokenize(
                     new Source(
-                        '{%include "my/includes/TPL.html" %}',
+                        '{% include "my/includes/TPL.html" %}',
                         'my/path/file.html.twig',
-                        ltrim(str_replace(getcwd(), '', 'my/path/file.html.twig'), '/')
+                        'my/path/file.html.twig'
                     )
                 ),
                 0
             ],
-            'case insensitive' => [
+            'success:extends' => [
                 $lexer->tokenize(
                     new Source(
-                        '{%include "my/includes/tpl.html" %}',
+                        '{% extends "my/includes/TPL.html" %}',
                         'my/path/file.html.twig',
-                        ltrim(str_replace(getcwd(), '', 'my/path/file.html.twig'), '/')
+                        'my/path/file.html.twig'
+                    )
+                ),
+                0
+            ],
+            'success:import' => [
+                $lexer->tokenize(
+                    new Source(
+                        '{% import "my/includes/TPL.html" as foo %}',
+                        'my/path/file.html.twig',
+                        'my/path/file.html.twig'
+                    )
+                ),
+                0
+            ],
+            'case_insensitive:include' => [
+                $lexer->tokenize(
+                    new Source(
+                        '{% include "my/includes/tpl.html" %}',
+                        'my/path/file.html.twig',
+                        'my/path/file.html.twig'
+                    )
+                ),
+                1
+            ],
+            'case_insensitive:extends' => [
+                $lexer->tokenize(
+                    new Source(
+                        '{% extends "my/includes/tpl.html" %}',
+                        'my/path/file.html.twig',
+                        'my/path/file.html.twig'
+                    )
+                ),
+                1
+            ],
+            'case_insensitive:import' => [
+                $lexer->tokenize(
+                    new Source(
+                        '{% import "my/includes/tpl.html" as foo %}',
+                        'my/path/file.html.twig',
+                        'my/path/file.html.twig'
                     )
                 ),
                 1
