@@ -79,6 +79,36 @@ class CaseSensitiveIncludeTest extends TestCase
                 ),
                 1
             ],
+            'bundle_template:include' => [
+                $lexer->tokenize(
+                    new Source(
+                        '{% include "@AcmeFoo/user/profile.html.twig" %}',
+                        'my/path/file.html.twig',
+                        'my/path/file.html.twig'
+                    )
+                ),
+                0
+            ],
+            'bundle_template:extends' => [
+                $lexer->tokenize(
+                    new Source(
+                        '{% extends "@AcmeFoo/user/profile.html.twig" %}',
+                        'my/path/file.html.twig',
+                        'my/path/file.html.twig'
+                    )
+                ),
+                0
+            ],
+            'bundle_template:import' => [
+                $lexer->tokenize(
+                    new Source(
+                        '{% import "@AcmeFoo/user/profile.html.twig" as foo %}',
+                        'my/path/file.html.twig',
+                        'my/path/file.html.twig'
+                    )
+                ),
+                0
+            ],
         ];
     }
 
