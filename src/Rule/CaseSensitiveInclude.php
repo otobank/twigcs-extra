@@ -88,6 +88,12 @@ final class CaseSensitiveInclude extends AbstractRule implements RuleInterface
 
     private function exists(string $include) : bool
     {
+        if (strpos($include, '@') === 0) {
+            // Skip Bundle Templates
+            // See: https://symfony.com/doc/current/templates.html#bundle-templates
+            return true;
+        }
+
         foreach ($this->paths as $i => $absoluteDir) {
             $absolutePath = $absoluteDir . DIRECTORY_SEPARATOR . $include;
             if (in_array($absolutePath, $this->getGlobPaths(), true)) {
