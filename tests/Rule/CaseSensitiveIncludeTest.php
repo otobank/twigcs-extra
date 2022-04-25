@@ -109,6 +109,36 @@ class CaseSensitiveIncludeTest extends TestCase
                 ),
                 0
             ],
+            '_self:include' => [
+                $lexer->tokenize(
+                    new Source(
+                        '{% include _self %}',
+                        'my/path/file.html.twig',
+                        'my/path/file.html.twig'
+                    )
+                ),
+                1
+            ],
+            '_self:extends' => [
+                $lexer->tokenize(
+                    new Source(
+                        '{% extends _self %}',
+                        'my/path/file.html.twig',
+                        'my/path/file.html.twig'
+                    )
+                ),
+                1
+            ],
+            '_self:import' => [
+                $lexer->tokenize(
+                    new Source(
+                        '{% import _self as foo %}',
+                        'my/path/file.html.twig',
+                        'my/path/file.html.twig'
+                    )
+                ),
+                0
+            ],
         ];
     }
 
