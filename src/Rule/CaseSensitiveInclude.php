@@ -43,7 +43,9 @@ final class CaseSensitiveInclude extends AbstractRule implements RuleInterface
 
             $include = $tokens->look(2)->getValue();
 
-            if (!$this->exists($include)) {
+            if ((!$this->isSkip($token->getValue(), $include))
+                && (!$this->exists($include))
+            ) {
                 $violations[] = $this->createViolation(
                     $tokens->getSourceContext()->getPath(),
                     $token->getLine(),
@@ -88,12 +90,6 @@ final class CaseSensitiveInclude extends AbstractRule implements RuleInterface
 
     private function exists(string $include) : bool
     {
-        if (strpos($include, '@') === 0) {
-            // Skip Bundle Templates
-            // See: https://symfony.com/doc/current/templates.html#bundle-templates
-            return true;
-        }
-
         foreach ($this->paths as $i => $absoluteDir) {
             $absolutePath = $absoluteDir . DIRECTORY_SEPARATOR . $include;
             if (in_array($absolutePath, $this->getGlobPaths(), true)) {
@@ -111,5 +107,22 @@ final class CaseSensitiveInclude extends AbstractRule implements RuleInterface
         }
 
         return $this->globPaths;
+    }
+
+    private function isSkip(string $tag, string $path) : bool
+    {
+        if (strpos($path, '@') === 0) {
+            // Skip Bundle Templates
+            // See: https://symfony.com/doc/current/templates.html#bundle-templates
+            return true;
+        }
+
+        if ($tag === 'import' && $path === '_self') {
+            // > Auto-import is only available as of Twig 2.11. For older versions, import macros using the special _self variable for the template name:
+            // See: https://twig.symfony.com/doc/2.x/tags/macro.html
+            return true;
+        }
+
+        return false;
     }
 }
